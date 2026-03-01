@@ -1,0 +1,19 @@
+metricbeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+# Inject organization metadata into every event
+fields:
+  organization_id: ${ORGANIZATION_ID}
+  organization_name: ${ORGANIZATION_NAME}
+fields_under_root: true
+
+output.elasticsearch:
+  hosts: ["${DESTINATION_ES_HOST}"]
+  username: "${DESTINATION_ES_USER}"
+  password: "${DESTINATION_ES_PASSWORD}"
+
+setup.kibana:
+  host: "${KIBANA_HOST}"
+
+setup.dashboards.enabled: true

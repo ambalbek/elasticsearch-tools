@@ -1,0 +1,86 @@
+{
+  "id": "node-usage-hourly",
+  "source": {
+    "index": [".ds-metrics-elasticsearch.node.stats-*"],
+    "query": {
+      "match_all": {}
+    }
+  },
+  "pivot": {
+    "group_by": {
+      "hour": {
+        "date_histogram": {
+          "field": "@timestamp",
+          "calendar_interval": "1h"
+        }
+      },
+      "organization_id": {
+        "terms": {
+          "field": "organization_id"
+        }
+      },
+      "cluster_name": {
+        "terms": {
+          "field": "elasticsearch.cluster.name"
+        }
+      },
+      "node_id": {
+        "terms": {
+          "field": "elasticsearch.node.id"
+        }
+      },
+      "node_name": {
+        "terms": {
+          "field": "elasticsearch.node.name"
+        }
+      }
+    },
+    "aggregations": {
+      "avg_cpu_percent": {
+        "avg": {
+          "field": "elasticsearch.node.stats.os.cpu.percent"
+        }
+      },
+      "avg_jvm_heap_percent": {
+        "avg": {
+          "field": "elasticsearch.node.stats.jvm.mem.heap_used_percent"
+        }
+      },
+      "max_memory_bytes": {
+        "max": {
+          "field": "elasticsearch.node.stats.os.mem.total_in_bytes"
+        }
+      },
+      "max_fs_total_bytes": {
+        "max": {
+          "field": "elasticsearch.node.stats.fs.total.total_in_bytes"
+        }
+      },
+      "min_fs_available_bytes": {
+        "min": {
+          "field": "elasticsearch.node.stats.fs.total.available_in_bytes"
+        }
+      },
+      "max_indexing_total": {
+        "max": {
+          "field": "elasticsearch.node.stats.indices.indexing.index_total"
+        }
+      },
+      "max_search_total": {
+        "max": {
+          "field": "elasticsearch.node.stats.indices.search.query_total"
+        }
+      }
+    }
+  },
+  "dest": {
+    "index": "consumption-node-hourly"
+  },
+  "sync": {
+    "time": {
+      "field": "@timestamp",
+      "delay": "60s"
+    }
+  },
+  "description": "Hourly node usage aggregation per organization"
+}

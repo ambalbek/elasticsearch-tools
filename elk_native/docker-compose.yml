@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:${ELASTIC_VERSION}
+    container_name: elk_native_metricbeat
+    user: root
+    environment:
+      - DESTINATION_ES_HOST=${DESTINATION_ES_HOST}
+      - DESTINATION_ES_USER=${DESTINATION_ES_USER}
+      - DESTINATION_ES_PASSWORD=${DESTINATION_ES_PASSWORD}
+      - KIBANA_HOST=${KIBANA_HOST}
+      - SOURCE_ES_HOST=${SOURCE_ES_HOST}
+      - SOURCE_ES_USER=${SOURCE_ES_USER}
+      - SOURCE_ES_PASSWORD=${SOURCE_ES_PASSWORD}
+      - ES_SSL_VERIFY=${ES_SSL_VERIFY}
+      - ORGANIZATION_ID=${ORGANIZATION_ID}
+      - ORGANIZATION_NAME=${ORGANIZATION_NAME}
+    volumes:
+      - ./metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
+      - ./metricbeat/modules.d:/usr/share/metricbeat/modules.d:ro

@@ -1,0 +1,81 @@
+{
+  "id": "node-usage-monthly",
+  "source": {
+    "index": ["consumption-node-hourly"],
+    "query": {
+      "match_all": {}
+    }
+  },
+  "pivot": {
+    "group_by": {
+      "month": {
+        "date_histogram": {
+          "field": "hour",
+          "calendar_interval": "1M"
+        }
+      },
+      "organization_id": {
+        "terms": {
+          "field": "organization_id"
+        }
+      },
+      "cluster_name": {
+        "terms": {
+          "field": "cluster_name"
+        }
+      },
+      "node_id": {
+        "terms": {
+          "field": "node_id"
+        }
+      },
+      "node_name": {
+        "terms": {
+          "field": "node_name"
+        }
+      }
+    },
+    "aggregations": {
+      "avg_cpu_percent": {
+        "avg": {
+          "field": "avg_cpu_percent"
+        }
+      },
+      "avg_jvm_heap_percent": {
+        "avg": {
+          "field": "avg_jvm_heap_percent"
+        }
+      },
+      "max_memory_bytes": {
+        "max": {
+          "field": "max_memory_bytes"
+        }
+      },
+      "min_fs_available_bytes": {
+        "min": {
+          "field": "min_fs_available_bytes"
+        }
+      },
+      "max_indexing_total": {
+        "max": {
+          "field": "max_indexing_total"
+        }
+      },
+      "max_search_total": {
+        "max": {
+          "field": "max_search_total"
+        }
+      }
+    }
+  },
+  "dest": {
+    "index": "consumption-node-monthly"
+  },
+  "sync": {
+    "time": {
+      "field": "hour",
+      "delay": "60m"
+    }
+  },
+  "description": "Monthly node usage aggregation rolled up from hourly"
+}

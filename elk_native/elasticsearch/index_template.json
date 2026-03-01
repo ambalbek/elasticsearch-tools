@@ -1,0 +1,69 @@
+{
+  "index_patterns": ["consumption-*"],
+  "template": {
+    "settings": {
+      "index.lifecycle.name": "consumption-policy",
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "hour": {
+          "type": "date"
+        },
+        "organization_id": {
+          "type": "keyword"
+        },
+        "organization_name": {
+          "type": "keyword"
+        },
+        "cluster_name": {
+          "type": "keyword"
+        },
+        "node_id": {
+          "type": "keyword"
+        },
+        "node_name": {
+          "type": "keyword"
+        },
+        "index_name": {
+          "type": "keyword"
+        },
+        "avg_cpu_percent": {
+          "type": "float"
+        },
+        "avg_jvm_heap_percent": {
+          "type": "float"
+        },
+        "max_memory_bytes": {
+          "type": "long"
+        },
+        "max_fs_total_bytes": {
+          "type": "long"
+        },
+        "min_fs_available_bytes": {
+          "type": "long"
+        },
+        "max_indexing_total": {
+          "type": "long"
+        },
+        "max_search_total": {
+          "type": "long"
+        },
+        "max_total_docs_count": {
+          "type": "long"
+        },
+        "max_store_size_bytes": {
+          "type": "long"
+        },
+        "max_search_query_total": {
+          "type": "long"
+        }
+      }
+    }
+  },
+  "priority": 200
+}

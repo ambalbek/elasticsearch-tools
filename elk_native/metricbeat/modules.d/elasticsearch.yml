@@ -1,0 +1,14 @@
+- module: elasticsearch
+  metricsets:
+    - node
+    - node_stats
+    - index
+    - index_summary
+    - cluster_stats
+    - pending_tasks
+  period: 10s
+  hosts: ["${SOURCE_ES_HOST}"]
+  username: "${SOURCE_ES_USER}"
+  password: "${SOURCE_ES_PASSWORD}"
+  ssl.verification_mode: "${ES_SSL_VERIFY}"
+  xpack.enabled: true

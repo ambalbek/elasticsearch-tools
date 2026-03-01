@@ -1,0 +1,66 @@
+{
+  "id": "index-usage-monthly",
+  "source": {
+    "index": ["consumption-index-hourly"],
+    "query": {
+      "match_all": {}
+    }
+  },
+  "pivot": {
+    "group_by": {
+      "month": {
+        "date_histogram": {
+          "field": "hour",
+          "calendar_interval": "1M"
+        }
+      },
+      "organization_id": {
+        "terms": {
+          "field": "organization_id"
+        }
+      },
+      "cluster_name": {
+        "terms": {
+          "field": "cluster_name"
+        }
+      },
+      "index_name": {
+        "terms": {
+          "field": "index_name"
+        }
+      }
+    },
+    "aggregations": {
+      "max_total_docs_count": {
+        "max": {
+          "field": "max_total_docs_count"
+        }
+      },
+      "max_store_size_bytes": {
+        "max": {
+          "field": "max_store_size_bytes"
+        }
+      },
+      "max_search_query_total": {
+        "max": {
+          "field": "max_search_query_total"
+        }
+      },
+      "max_indexing_total": {
+        "max": {
+          "field": "max_indexing_total"
+        }
+      }
+    }
+  },
+  "dest": {
+    "index": "consumption-index-monthly"
+  },
+  "sync": {
+    "time": {
+      "field": "hour",
+      "delay": "60m"
+    }
+  },
+  "description": "Monthly index usage aggregation rolled up from hourly"
+}

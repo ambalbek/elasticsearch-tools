@@ -1,0 +1,66 @@
+{
+  "id": "index-usage-hourly",
+  "source": {
+    "index": [".ds-metrics-elasticsearch.index.stats-*"],
+    "query": {
+      "match_all": {}
+    }
+  },
+  "pivot": {
+    "group_by": {
+      "hour": {
+        "date_histogram": {
+          "field": "@timestamp",
+          "calendar_interval": "1h"
+        }
+      },
+      "organization_id": {
+        "terms": {
+          "field": "organization_id"
+        }
+      },
+      "cluster_name": {
+        "terms": {
+          "field": "elasticsearch.cluster.name"
+        }
+      },
+      "index_name": {
+        "terms": {
+          "field": "elasticsearch.index.name"
+        }
+      }
+    },
+    "aggregations": {
+      "max_total_docs_count": {
+        "max": {
+          "field": "elasticsearch.index.total.docs.count"
+        }
+      },
+      "max_store_size_bytes": {
+        "max": {
+          "field": "elasticsearch.index.total.store.size_in_bytes"
+        }
+      },
+      "max_search_query_total": {
+        "max": {
+          "field": "elasticsearch.index.total.search.query_total"
+        }
+      },
+      "max_indexing_total": {
+        "max": {
+          "field": "elasticsearch.index.total.indexing.index_total"
+        }
+      }
+    }
+  },
+  "dest": {
+    "index": "consumption-index-hourly"
+  },
+  "sync": {
+    "time": {
+      "field": "@timestamp",
+      "delay": "60s"
+    }
+  },
+  "description": "Hourly index usage aggregation per organization"
+}
